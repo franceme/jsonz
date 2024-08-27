@@ -29,7 +29,7 @@ class jsonl(object):
     def load(fp):
         output = []
         for content_line in self.__load_file(fp):
-            if not content_line.strip()startswith("//"):
+            if not content_line.strip().startswith("//"):
                 try:
                     output += [
                         json.loads(content_line)
