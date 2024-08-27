@@ -5,30 +5,25 @@ import os, sys, json
 https://github.com/python/cpython/blob/main/Lib/json/__init__.py
 """
 
-class core_json(ABC):
-    def __load_file(self, fp):
-        if not os.path.exists(fp):
-            return None
-        with open(fp, 'r') as reader:
-            return reader.readlines()
-    @staticmethod
-    @abstractmethod
-    def load(fp):
-        pass
+def load_file(fp):
+    if not os.path.exists(fp):
+        return None
+    with open(fp, 'r') as reader:
+        return reader.readlines()
 
 class jsonc(object):
     @staticmethod
     def load(fp):
         return json.loads("\n".join([
             x
-            for x in self.__load_file(fp)
+            for x in load_file(fp)
             if not x.startswith("//")
         ]))
 class jsonl(object):
     @staticmethod
     def load(fp):
         output = []
-        for content_line in self.__load_file(fp):
+        for content_line in load_file(fp):
             if not content_line.strip().startswith("//"):
                 try:
                     output += [
