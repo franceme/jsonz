@@ -89,10 +89,6 @@ setup(
 	entry_points={
 	},
 	install_requires=[
-		"asana==1.0.0",
-		"funbelts",
-		"python-dateutil",
-		"pytz"
 	],
 	include_package_data=True,
 	classifiers=[
