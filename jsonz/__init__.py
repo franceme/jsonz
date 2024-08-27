@@ -1,4 +1,4 @@
-from ABC import abc, abstractmethod
+from abc import ABC, abstractmethod
 import os, sys, json
 
 """
