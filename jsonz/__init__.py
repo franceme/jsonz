@@ -5,7 +5,7 @@ import os, sys, json
 https://github.com/python/cpython/blob/main/Lib/json/__init__.py
 """
 
-class core_json(abc):
+class core_json(ABC):
     def __load_file(self, fp):
         if not os.path.exists(fp):
             return None
