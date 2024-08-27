@@ -19,22 +19,23 @@ class core_json(ABC):
 class jsonc(object):
     @staticmethod
     def load(fp):
-        return json.loads([
+        return json.loads("\n".join([
             x
             for x in self.__load_file(fp)
             if not x.startswith("//")
-        ])
+        ]))
 class jsonl(object):
     @staticmethod
     def load(fp):
         output = []
         for content_line in self.__load_file(fp):
-            try:
-                output += [
-                    json.loads(content_line)
-                ]
-            except Exception as e:
-                print(e)
+            if not content_line.strip()startswith("//"):
+                try:
+                    output += [
+                        json.loads(content_line)
+                    ]
+                except Exception as e:
+                    print(e)
         return output
 
 def load(file:str):
