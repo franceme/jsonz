@@ -13,18 +13,20 @@ class core_json(ABC):
             return reader.readlines()
     @property
     @abstractmethod
-    def load(self, fp):
+    def load(fp):
         pass
 
 class jsonc(object):
-    def load(self, fp):
+    @property
+    def load(fp):
         return json.loads([
             x
             for x in self.__load_file(fp)
             if not x.startswith("//")
         ])
 class jsonl(object):
-    def load(self, fp):
+    @property
+    def load(fp):
         output = []
         for content_line in self.__load_file(fp):
             try:
@@ -38,11 +40,11 @@ class jsonl(object):
 def load_json(file:str):
     if not os.path.exists(file):
         return None
-    if os.path.endswith(".jsonc"):
+    if file.endswith(".jsonc"):
         return jsonc.load(file)
-    elif os.path.endswith(".jsonl"):
+    elif file.endswith(".jsonl"):
         return jsonl.load(file)
-    if os.path.endswith(".json"):
+    if file.endswith(".json"):
         with open(file, "r") as reader:
             return json.load(reader)
     return None
