@@ -1,36 +1,44 @@
 from abc import ABC, abstractmethod
-import os, sys, json
+import os, sys, json, shutil
 
 """
 https://github.com/python/cpython/blob/main/Lib/json/__init__.py
 """
 
-def load_file(fp):
-    if not os.path.exists(fp):
-        return None
-    with open(fp, 'r') as reader:
-        return reader.readlines()
 
 class jsonc(object):
     @staticmethod
     def load(fp):
-        return json.loads("\n".join([
-            x
-            for x in load_file(fp)
-            if not x.startswith("//")
-        ]))
+        backup = "."+str(fp)
+        shutil.copy(fp, backup)
+        from fileinput import FileInput as finput
+        with finput(backup, inplace=True, backup=None) as foil:
+            for line in foil:
+                if not line.strip().startswith("//"):
+                    print(line,end='')
+
+        with open(backup, "r") as reader:
+            content = json.load(reader)
+
+        try:os.remove(backup)
+        except Exception as e:
+            print(e)
+
+        return content
+
 class jsonl(object):
     @staticmethod
     def load(fp):
         output = []
-        for content_line in load_file(fp):
-            if not content_line.strip().startswith("//"):
-                try:
-                    output += [
-                        json.loads(content_line)
-                    ]
-                except Exception as e:
-                    print(e)
+        with open(fp, 'r') as reader:
+            for content_line in reader.readlines():
+                if not content_line.strip().startswith("//"):
+                    try:
+                        output += [
+                            json.loads(content_line)
+                        ]
+                    except Exception as e:
+                        print(e)
         return output
 
 def load(file:str):
