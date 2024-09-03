@@ -9,16 +9,20 @@ https://github.com/python/cpython/blob/main/Lib/json/__init__.py
 class jsonc(object):
     @staticmethod
     def load(fp):
-        backup = "."+str(fp)
+        backup = str(fp)+".backup"
         shutil.copy(fp, backup)
-        from fileinput import FileInput as finput
-        with finput(backup, inplace=True, backup=None) as foil:
-            for line in foil:
-                if not line.strip().startswith("//"):
-                    print(line,end='')
+        try:
+            from fileinput import FileInput as finput
+            with finput(backup, inplace=True, backup=None) as foil:
+                for line in foil:
+                    if not line.strip().startswith("//"):
+                        print(line,end='')
 
-        with open(backup, "r") as reader:
-            content = json.load(reader)
+            with open(backup, "r") as reader:
+                content = json.load(reader)
+
+        except:
+            shutil.copy(backup, fp)
 
         try:os.remove(backup)
         except Exception as e:
